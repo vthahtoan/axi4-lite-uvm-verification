@@ -1,0 +1,96 @@
+xrun(64): 25.03-s001: (c) Copyright 1995-2025 Cadence Design Systems, Inc.
+TOOL:	xrun(64)	25.03-s001: Started on Oct 23, 2026 at 14:02:34 EDT
+xrun
+	-64bit
+	-sv
+	-uvmhome CDNS-1.2
+	-xmlibdirname /home/toanhinh/projects/axi4lite/work/directed_test/xcelium_fixed.d
+	-snapshot directed_tb
+	-coverage u
+	-covoverwrite
+	+incdir+../../tb
+	../../rtl/axi_lite_slave.sv
+	../../tb/axi_lite_if.sv
+	../../tb/axi_lite_assertions.sv
+	../../tb/axi_lite_pkg.sv
+	../../tb/tb_top.sv
+	-top tb_top
+	-l directed.log
+	+UVM_TESTNAME=axi_lite_directed_test
+Loading snapshot worklib.directed_tb:sv .................... Done
+SVSEED default: 1
+xcelium> source /home/toanhinh/tools/cadence/XCELIUM2503/tools/xcelium/files/xmsimrc
+xcelium> source /home/toanhinh/tools/cadence/XCELIUM2503/tools/methodology/UVM/CDNS-1.2/additions/sv/files/tcl/uvm_sim.tcl
+xcelium> run
+UVM_INFO /home/toanhinh/tools/cadence/XCELIUM2503/tools/methodology/UVM/CDNS-1.2/sv/src/base/uvm_root.svh(412) @ 0: reporter [UVM/RELNOTES] 
+----------------------------------------------------------------
+CDNS-UVM-1.2 (25.03-s001)
+(C) 2007-2014 Mentor Graphics Corporation
+(C) 2007-2014 Cadence Design Systems, Inc.
+(C) 2006-2014 Synopsys, Inc.
+(C) 2011-2013 Cypress Semiconductor Corp.
+(C) 2013-2014 NVIDIA Corporation
+----------------------------------------------------------------
+
+  ***********       IMPORTANT RELEASE NOTES         ************
+
+  You are using a version of the UVM library that has been compiled
+  with `UVM_NO_DEPRECATED undefined.
+  See http://www.eda.org/svdb/view.php?id=3313 for more details.
+
+  You are using a version of the UVM library that has been compiled
+  with `UVM_OBJECT_DO_NOT_NEED_CONSTRUCTOR undefined.
+  See http://www.eda.org/svdb/view.php?id=3770 for more details.
+
+      (Specify +UVM_NO_RELNOTES to turn off this notice)
+
+UVM_INFO @ 0: reporter [RNTST] Running test axi_lite_directed_test...
+UVM_INFO ../../tb/axi_lite_directed_test.sv(35) @ 0: uvm_test_top [DIRECTED_TEST] Starting write/read at address 0x00000008
+SDI/Verilog Transaction Recording Facility Version 25.03-s001
+UVM_INFO ../../tb/axi_lite_directed_test.sv(45) @ 110000: uvm_test_top [DIRECTED_TEST] Directed sequence completed
+UVM_INFO /home/toanhinh/tools/cadence/XCELIUM2503/tools/methodology/UVM/CDNS-1.2/sv/src/base/uvm_objection.svh(1271) @ 110000: reporter [TEST_DONE] 'run' phase is ready to proceed to the 'extract' phase
+UVM_INFO ../../tb/axi_lite_coverage.sv(75) @ 110000: uvm_test_top.env.cov [COV_SUMMARY] transactions=2 functional_coverage=40.18%
+UVM_INFO ../../tb/axi_lite_scoreboard.sv(127) @ 110000: uvm_test_top.env.scb [SCB_SUMMARY] writes=1 reads=1 response_errors=0 data_errors=0
+UVM_INFO /home/toanhinh/tools/cadence/XCELIUM2503/tools/methodology/UVM/CDNS-1.2/sv/src/base/uvm_report_catcher.svh(705) @ 110000: reporter [UVM/REPORT/CATCHER] 
+--- UVM Report catcher Summary ---
+
+
+Number of demoted UVM_FATAL reports  :    0
+Number of demoted UVM_ERROR reports  :    0
+Number of demoted UVM_WARNING reports:    0
+Number of caught UVM_FATAL reports   :    0
+Number of caught UVM_ERROR reports   :    0
+Number of caught UVM_WARNING reports :    0
+
+UVM_INFO /home/toanhinh/tools/cadence/XCELIUM2503/tools/methodology/UVM/CDNS-1.2/sv/src/base/uvm_report_server.svh(851) @ 110000: reporter [UVM/REPORT/SERVER] 
+--- UVM Report Summary ---
+
+** Report counts by severity
+UVM_INFO :    8
+UVM_WARNING :    0
+UVM_ERROR :    0
+UVM_FATAL :    0
+** Report counts by id
+[COV_SUMMARY]     1
+[DIRECTED_TEST]     2
+[RNTST]     1
+[SCB_SUMMARY]     1
+[TEST_DONE]     1
+[UVM/RELNOTES]     1
+[UVM/REPORT/CATCHER]     1
+
+Simulation complete via $finish(1) at time 110 NS + 64
+/home/toanhinh/tools/cadence/XCELIUM2503/tools/methodology/UVM/CDNS-1.2/sv/src/base/uvm_root.svh:543     $finish;
+xcelium> exit
+xmsim: *N,COVCGN: Coverage configuration file command "set_covergroup -new_instance_reporting" can be specified to improve the scoping and naming of covergroup instances. It may be noted that subsequent merging of a coverage database saved with this command and a coverage database saved without this command is not allowed.
+
+coverage setup:
+  workdir  :  ./cov_work
+  dutinst  :  tb_top(tb_top)
+  scope    :  scope
+  testname :  test
+
+coverage files:
+  model(design data) :  ./cov_work/scope/icc_00000000_7357a3de.ucm (reused)
+  data               :  ./cov_work/scope/test/icc_00000000_7357a3de.ucd
+TOOL:	xrun(64)	25.03-s001: Exiting on Oct 23, 2026 at 14:02:34 EDT  (total: 00:00:00)
