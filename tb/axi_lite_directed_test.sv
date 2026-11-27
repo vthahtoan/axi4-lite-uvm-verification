@@ -32,13 +32,13 @@ class axi_lite_directed_test extends uvm_test;
 
         seq = axi_lite_sequence::type_id::create("seq");
 
-        `uvm_info("DIRECTED_TEST", "Starting write/read at address 0x00000008", UVM_LOW)
+        `uvm_info("DIRECTED_TEST", "Checking empty read, FIFO fill, full write, and FIFO drain at 0x00", UVM_LOW)
         seq.start(env.agent.seqr);
 
         //CHECK
-        if ((env.scb.write_count != 1) || (env.scb.read_count != 1)) begin
+        if ((env.scb.write_count != 17) || (env.scb.read_count != 18)) begin
             `uvm_error("TRANSACTION_COUNT",
-                $sformatf("Expected 1 write and 1 read; scoreboard received %0d writes and %0d reads",
+                $sformatf("Expected 17 writes and 18 reads; scoreboard received %0d writes and %0d reads",
                           env.scb.write_count, env.scb.read_count))
         end
 

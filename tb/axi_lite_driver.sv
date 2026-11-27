@@ -81,17 +81,16 @@ class axi_lite_driver extends uvm_driver #(axi_lite_item);
     //WRITE
     task drive_write(axi_lite_item item);
         @(negedge vif.ACLK);
-        vif.AWADDR  = item.addr;
-        vif.AWPROT  = 3'b000;
-        vif.AWVALID = 1'b1;
-        vif.WDATA   = item.wdata;
-        vif.WSTRB   = item.wstrb;
-        vif.WVALID  = 1'b1;
         vif.BREADY  = 1'b0;
 
         fork
             //AW
             begin
+                repeat (item.aw_delay) @(negedge vif.ACLK);
+                vif.AWADDR  = item.addr;
+                vif.AWPROT  = 3'b000;
+                vif.AWVALID = 1'b1;
+
                 do @(posedge vif.ACLK);
                 while (vif.AWREADY !== 1'b1);
 
@@ -101,6 +100,10 @@ class axi_lite_driver extends uvm_driver #(axi_lite_item);
 
             //W
             begin
+                repeat (item.w_delay) @(negedge vif.ACLK);
+                vif.WDATA   = item.wdata;
+                vif.WSTRB   = item.wstrb;
+                vif.WVALID  = 1'b1;
                 do @(posedge vif.ACLK);
                 while (vif.WREADY !== 1'b1);
 
@@ -110,6 +113,7 @@ class axi_lite_driver extends uvm_driver #(axi_lite_item);
         join
 
         //B
+        repeat (item.bready_delay) @(negedge vif.ACLK);
         vif.BREADY = 1'b1;
         do @(posedge vif.ACLK);
         while (vif.BVALID !== 1'b1);
@@ -133,6 +137,8 @@ class axi_lite_driver extends uvm_driver #(axi_lite_item);
 
         @(negedge vif.ACLK);
         vif.ARVALID = 1'b0;
+
+        repeat(item.rready_delay) @(negedge vif.ACLK);
         vif.RREADY  = 1'b1;
 
         //R

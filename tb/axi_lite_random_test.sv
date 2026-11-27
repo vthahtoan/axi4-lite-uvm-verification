@@ -31,24 +31,26 @@ class axi_lite_random_test extends uvm_test;
         end
 
         seq = axi_lite_random_sequence::type_id::create("seq");
-        seq.num_pairs = 100;
 
         `uvm_info("RANDOM_TEST",
-            $sformatf("Starting %0d randomized write/read pairs", seq.num_pairs),
+            $sformatf("Starting %0d randomized FIFO transactions", seq.num_transactions),
             UVM_LOW)
 
         seq.start(env.agent.seqr);
 
         //CHECK
-        if ((env.scb.write_count != seq.num_pairs) ||
-            (env.scb.read_count != seq.num_pairs)) begin
+        if ((env.scb.write_count != seq.write_count) ||
+            (env.scb.read_count != seq.read_count)) begin
             `uvm_error("TRANSACTION_COUNT",
                 $sformatf("Expected %0d writes and %0d reads; scoreboard received %0d writes and %0d reads",
-                          seq.num_pairs, seq.num_pairs,
+                          seq.write_count, seq.read_count,
                           env.scb.write_count, env.scb.read_count))
         end
 
-        `uvm_info("RANDOM_TEST", "Random sequence completed", UVM_LOW)
+        `uvm_info("RANDOM_TEST",
+            $sformatf("Random sequence completed with %0d writes and %0d reads",
+                      seq.write_count, seq.read_count),
+            UVM_LOW)
 
         phase.drop_objection(this);
     endtask

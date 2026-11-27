@@ -1,5 +1,5 @@
 xrun(64): 25.03-s001: (c) Copyright 1995-2025 Cadence Design Systems, Inc.
-TOOL:	xrun(64)	25.03-s001: Started on Oct 23, 2026 at 14:02:34 EDT
+TOOL:	xrun(64)	25.03-s001: Started on Nov 27, 2026 at 10:43:12 EST
 xrun
 	-64bit
 	-sv
@@ -14,13 +14,70 @@ xrun
 	../../tb/axi_lite_assertions.sv
 	../../tb/axi_lite_pkg.sv
 	../../tb/tb_top.sv
+	-access +r
+	-input wave_directed.tcl
 	-top tb_top
 	-l directed.log
 	+UVM_TESTNAME=axi_lite_directed_test
+Recompiling... reason: file '/home/toanhinh/projects/axi4lite/tb/axi_lite_agent.sv' is newer than expected.
+	expected: Wed Nov 25 11:38:49 2026
+	actual:   Thu Nov 26 01:13:02 2026
+Compiling UVM packages (uvm_pkg.sv cdns_uvm_pkg.sv) using uvmhome location /home/toanhinh/tools/cadence/XCELIUM2503/tools/methodology/UVM/CDNS-1.2
+file: ../../tb/axi_lite_pkg.sv
+	package worklib.axi_lite_pkg:sv
+		errors: 0, warnings: 0
+file: ../../tb/tb_top.sv
+	module worklib.tb_top:sv
+		errors: 0, warnings: 0
+	Elaborating the design hierarchy:
+		Caching library 'worklib' ....... Done
+	Top level design units:
+		$unit_0x6bf61ec2
+		uvm_pkg
+		cdns_uvmapi
+		cdns_assert2uvm_pkg
+		cdns_uvm_pkg
+		axi_lite_pkg
+		tb_top
+	Building instance overlay tables: .................... Done
+	Enabling instrumentation for coverage types: functional
+	Generating native compiled code:
+		worklib.tb_top:sv <0x0ec35e52>
+			streams: 801, words: 923861
+	Building instance specific data structures.
+xmelab: *W,CGPIDF: Covergroup "per_instance" option , by default, is set as 0.
+xmelab: *N,COVCGN: Coverage configuration file command "set_covergroup -new_instance_reporting" can be specified to improve the scoping and naming of covergroup instances. It may be noted that subsequent merging of a coverage database saved with this command and a coverage database saved without this command is not allowed.
+	Loading native compiled code:     .................... Done
+	Design hierarchy summary:
+		                        Instances  Unique
+		Modules:                        4       4
+		Interfaces:                     1       1
+		Verilog packages:               5       5
+		Registers:                 16,818  11,853
+		Scalar wires:                  27       -
+		Vectored wires:                15       -
+		Named events:                  17      25
+		Always blocks:                 74      74
+		Initial blocks:               356     188
+		Parallel blocks:               29      30
+		Cont. assignments:              6       6
+		Pseudo assignments:            26       -
+		Assertions:                    17      17
+		Covergroup Instances:           0       1
+		Compilation units:              1       1
+		SV Class declarations:        236     351
+		SV Class specializations:     453     453
+		Process Clocks:                17       3
+		Simulation timescale:         1ps
+	Writing initial simulation snapshot: worklib.directed_tb:sv
 Loading snapshot worklib.directed_tb:sv .................... Done
 SVSEED default: 1
 xcelium> source /home/toanhinh/tools/cadence/XCELIUM2503/tools/xcelium/files/xmsimrc
 xcelium> source /home/toanhinh/tools/cadence/XCELIUM2503/tools/methodology/UVM/CDNS-1.2/additions/sv/files/tcl/uvm_sim.tcl
+xcelium> database -open -shm -into directed.shm directed -default
+Created default SHM database directed
+xcelium> probe -create -database directed tb_top.axi_if -all
+Created probe 1
 xcelium> run
 UVM_INFO /home/toanhinh/tools/cadence/XCELIUM2503/tools/methodology/UVM/CDNS-1.2/sv/src/base/uvm_root.svh(412) @ 0: reporter [UVM/RELNOTES] 
 ----------------------------------------------------------------
@@ -45,13 +102,15 @@ CDNS-UVM-1.2 (25.03-s001)
       (Specify +UVM_NO_RELNOTES to turn off this notice)
 
 UVM_INFO @ 0: reporter [RNTST] Running test axi_lite_directed_test...
-UVM_INFO ../../tb/axi_lite_directed_test.sv(35) @ 0: uvm_test_top [DIRECTED_TEST] Starting write/read at address 0x00000008
+UVM_INFO ../../tb/axi_lite_directed_test.sv(35) @ 0: uvm_test_top [DIRECTED_TEST] Checking empty read, FIFO fill, full write, and FIFO drain at 0x00
 SDI/Verilog Transaction Recording Facility Version 25.03-s001
-UVM_INFO ../../tb/axi_lite_directed_test.sv(45) @ 110000: uvm_test_top [DIRECTED_TEST] Directed sequence completed
-UVM_INFO /home/toanhinh/tools/cadence/XCELIUM2503/tools/methodology/UVM/CDNS-1.2/sv/src/base/uvm_objection.svh(1271) @ 110000: reporter [TEST_DONE] 'run' phase is ready to proceed to the 'extract' phase
-UVM_INFO ../../tb/axi_lite_coverage.sv(75) @ 110000: uvm_test_top.env.cov [COV_SUMMARY] transactions=2 functional_coverage=40.18%
-UVM_INFO ../../tb/axi_lite_scoreboard.sv(127) @ 110000: uvm_test_top.env.scb [SCB_SUMMARY] writes=1 reads=1 response_errors=0 data_errors=0
-UVM_INFO /home/toanhinh/tools/cadence/XCELIUM2503/tools/methodology/UVM/CDNS-1.2/sv/src/base/uvm_report_catcher.svh(705) @ 110000: reporter [UVM/REPORT/CATCHER] 
+UVM_INFO ../../tb/axi_lite_assertions.sv(107) @ 1355000: reporter [FIFO_WR_WRAP] Write pointer wrapped from 15 to 0
+UVM_INFO ../../tb/axi_lite_assertions.sv(120) @ 2385000: reporter [FIFO_RD_WRAP] Read pointer wrapped from 15 to 0
+UVM_INFO ../../tb/axi_lite_directed_test.sv(45) @ 2480000: uvm_test_top [DIRECTED_TEST] Directed sequence completed
+UVM_INFO /home/toanhinh/tools/cadence/XCELIUM2503/tools/methodology/UVM/CDNS-1.2/sv/src/base/uvm_objection.svh(1271) @ 2480000: reporter [TEST_DONE] 'run' phase is ready to proceed to the 'extract' phase
+UVM_INFO ../../tb/axi_lite_coverage.sv(60) @ 2480000: uvm_test_top.env.cov [COV_SUMMARY] samples=35 operation_occupancy=100.00% functional_coverage=100.00%
+UVM_INFO ../../tb/axi_lite_scoreboard.sv(126) @ 2480000: uvm_test_top.env.scb [SCB_SUMMARY] writes=17 reads=18 response_errors=0 data_errors=0
+UVM_INFO /home/toanhinh/tools/cadence/XCELIUM2503/tools/methodology/UVM/CDNS-1.2/sv/src/base/uvm_report_catcher.svh(705) @ 2480000: reporter [UVM/REPORT/CATCHER] 
 --- UVM Report catcher Summary ---
 
 
@@ -62,24 +121,26 @@ Number of caught UVM_FATAL reports   :    0
 Number of caught UVM_ERROR reports   :    0
 Number of caught UVM_WARNING reports :    0
 
-UVM_INFO /home/toanhinh/tools/cadence/XCELIUM2503/tools/methodology/UVM/CDNS-1.2/sv/src/base/uvm_report_server.svh(851) @ 110000: reporter [UVM/REPORT/SERVER] 
+UVM_INFO /home/toanhinh/tools/cadence/XCELIUM2503/tools/methodology/UVM/CDNS-1.2/sv/src/base/uvm_report_server.svh(851) @ 2480000: reporter [UVM/REPORT/SERVER] 
 --- UVM Report Summary ---
 
 ** Report counts by severity
-UVM_INFO :    8
+UVM_INFO :   10
 UVM_WARNING :    0
 UVM_ERROR :    0
 UVM_FATAL :    0
 ** Report counts by id
 [COV_SUMMARY]     1
 [DIRECTED_TEST]     2
+[FIFO_RD_WRAP]     1
+[FIFO_WR_WRAP]     1
 [RNTST]     1
 [SCB_SUMMARY]     1
 [TEST_DONE]     1
 [UVM/RELNOTES]     1
 [UVM/REPORT/CATCHER]     1
 
-Simulation complete via $finish(1) at time 110 NS + 64
+Simulation complete via $finish(1) at time 2480 NS + 64
 /home/toanhinh/tools/cadence/XCELIUM2503/tools/methodology/UVM/CDNS-1.2/sv/src/base/uvm_root.svh:543     $finish;
 xcelium> exit
 xmsim: *N,COVCGN: Coverage configuration file command "set_covergroup -new_instance_reporting" can be specified to improve the scoping and naming of covergroup instances. It may be noted that subsequent merging of a coverage database saved with this command and a coverage database saved without this command is not allowed.
@@ -91,6 +152,6 @@ coverage setup:
   testname :  test
 
 coverage files:
-  model(design data) :  ./cov_work/scope/icc_00000000_7357a3de.ucm (reused)
-  data               :  ./cov_work/scope/test/icc_00000000_7357a3de.ucd
-TOOL:	xrun(64)	25.03-s001: Exiting on Oct 23, 2026 at 14:02:34 EDT  (total: 00:00:00)
+  model(design data) :  ./cov_work/scope/icc_00000000_4d9b92e2.ucm (reused)
+  data               :  ./cov_work/scope/test/icc_00000000_4d9b92e2.ucd
+TOOL:	xrun(64)	25.03-s001: Exiting on Nov 27, 2026 at 10:43:15 EST  (total: 00:00:03)

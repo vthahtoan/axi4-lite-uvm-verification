@@ -36,8 +36,12 @@ module axi_lite_slave (
 
     localparam logic [1:0] RESP_OKAY   = 2'b00;
     localparam logic [1:0] RESP_SLVERR = 2'b10;
+    localparam logic [31:0] DATA_ADDR = 32'h0000_0000;
 
-    logic [31:0] regs [0:7];
+    logic [31:0] fifo_mem [0:15];
+    logic [3:0]  wr_ptr, rd_ptr;
+    logic [4:0]  fifo_count;
+    logic        write_commit, push, pop;
 
     logic        aw_pending;
     logic [31:0] awaddr_q;
@@ -49,9 +53,40 @@ module axi_lite_slave (
     assign WREADY  = ARESETn && !w_pending  && !BVALID;
     assign ARREADY = ARESETn && !RVALID;
 
-    function automatic bit address_valid(input logic [31:0] addr);
-        address_valid = (addr[31:5] == 0) && (addr[1:0] == 0);
-    endfunction
+    assign write_commit = aw_pending && w_pending && !BVALID;
+
+    assign push = write_commit
+               && (awaddr_q == DATA_ADDR)
+               && (wstrb_q == 4'hF)
+               && (fifo_count < 5'd16);
+
+    assign pop = ARVALID && ARREADY
+              && (ARADDR == DATA_ADDR)
+              && (fifo_count != 5'd0);
+
+    //FIFO
+    always_ff @(posedge ACLK or negedge ARESETn) begin
+        if (!ARESETn) begin
+            fifo_count <= 5'd0;
+            wr_ptr     <= 4'd0;
+            rd_ptr     <= 4'd0;
+        end else begin
+            if (push) begin
+                fifo_mem[wr_ptr] <= wdata_q;
+                wr_ptr           <= wr_ptr + 1'b1;
+            end
+
+            if (pop) begin
+                rd_ptr <= rd_ptr + 1'b1;
+            end
+
+            case ({push, pop})
+                2'b10: fifo_count <= fifo_count + 1'b1;
+                2'b01: fifo_count <= fifo_count - 1'b1;
+                default: begin end
+            endcase
+        end
+    end
 
     //WRITE
     always_ff @(posedge ACLK or negedge ARESETn) begin
@@ -63,10 +98,6 @@ module axi_lite_slave (
             wstrb_q    <= 4'b0;
             BVALID     <= 1'b0;
             BRESP      <= RESP_OKAY;
-
-            for (int i = 0; i < 8; i++) begin
-                regs[i] <= 32'b0;
-            end
         end else begin
             if (AWVALID && AWREADY) begin
                 awaddr_q   <= AWADDR;
@@ -74,8 +105,8 @@ module axi_lite_slave (
             end
 
             if (WVALID && WREADY) begin
-                wdata_q  <= WDATA;
-                wstrb_q  <= WSTRB;
+                wdata_q   <= WDATA;
+                wstrb_q   <= WSTRB;
                 w_pending <= 1'b1;
             end
 
@@ -83,19 +114,8 @@ module axi_lite_slave (
                 BVALID <= 1'b0;
             end
 
-            if (aw_pending && w_pending && !BVALID) begin
-                if (address_valid(awaddr_q)) begin
-                    for (int byte_idx = 0; byte_idx < 4; byte_idx++) begin
-                        if (wstrb_q[byte_idx]) begin
-                            regs[awaddr_q[4:2]][8*byte_idx +: 8]
-                                <= wdata_q[8*byte_idx +: 8];
-                        end
-                    end
-                    BRESP <= RESP_OKAY;
-                end else begin
-                    BRESP <= RESP_SLVERR;
-                end
-
+            if (write_commit) begin
+                BRESP      <= push ? RESP_OKAY : RESP_SLVERR;
                 BVALID     <= 1'b1;
                 aw_pending <= 1'b0;
                 w_pending  <= 1'b0;
@@ -116,14 +136,8 @@ module axi_lite_slave (
 
             if (ARVALID && ARREADY) begin
                 RVALID <= 1'b1;
-
-                if (address_valid(ARADDR)) begin
-                    RDATA <= regs[ARADDR[4:2]];
-                    RRESP <= RESP_OKAY;
-                end else begin
-                    RDATA <= 32'b0;
-                    RRESP <= RESP_SLVERR;
-                end
+                RDATA  <= pop ? fifo_mem[rd_ptr] : 32'd0;
+                RRESP  <= pop ? RESP_OKAY : RESP_SLVERR;
             end
         end
     end

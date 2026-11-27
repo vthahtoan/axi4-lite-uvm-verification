@@ -1,5 +1,5 @@
 xrun(64): 25.03-s001: (c) Copyright 1995-2025 Cadence Design Systems, Inc.
-TOOL:	xrun(64)	25.03-s001: Started on Oct 23, 2026 at 14:05:43 EDT
+TOOL:	xrun(64)	25.03-s001: Started on Nov 27, 2026 at 10:41:34 EST
 xrun
 	-64bit
 	-sv
@@ -15,28 +15,15 @@ xrun
 	../../tb/axi_lite_assertions.sv
 	../../tb/axi_lite_pkg.sv
 	../../tb/tb_top.sv
+	-access +r
+	-input wave_random.tcl
 	-top tb_top
 	-l random.log
 	+UVM_TESTNAME=axi_lite_random_test
-Compiling UVM packages (uvm_pkg.sv cdns_uvm_pkg.sv) using uvmhome location /home/toanhinh/tools/cadence/XCELIUM2503/tools/methodology/UVM/CDNS-1.2
-file: ../../rtl/axi_lite_slave.sv
-	module worklib.axi_lite_slave:sv
-		errors: 0, warnings: 0
-file: ../../tb/axi_lite_if.sv
-	interface worklib.axi_lite_if:sv
-		errors: 0, warnings: 0
-file: ../../tb/axi_lite_assertions.sv
-	module worklib.axi_lite_assertions:sv
-		errors: 0, warnings: 0
-file: ../../tb/axi_lite_pkg.sv
-	package worklib.axi_lite_pkg:sv
-		errors: 0, warnings: 0
-file: ../../tb/tb_top.sv
-	module worklib.tb_top:sv
-		errors: 0, warnings: 0
 	Elaborating the design hierarchy:
 		Caching library 'worklib' ....... Done
 	Top level design units:
+		$unit_0x6bf61ec2
 		uvm_pkg
 		cdns_uvmapi
 		cdns_assert2uvm_pkg
@@ -46,49 +33,56 @@ file: ../../tb/tb_top.sv
 	Building instance overlay tables: .................... Done
 	Enabling instrumentation for coverage types: functional
 	Generating native compiled code:
-		worklib.axi_lite_slave:sv <0x09f4c141>
-			streams:  18, words:  8067
-		worklib.tb_top:sv <0x5c4bee2f>
-			streams: 728, words: 808236
-		worklib.axi_lite_assertions:sv <0x77a347f9>
-			streams:  25, words: 29669
-		worklib.cdns_uvm_pkg:sv <0x7d2058cc>
-			streams: 249, words: 384065
-		worklib.cdns_uvmapi:svp <0x17de291e>
-			streams:  27, words: 29149
-		worklib.cdns_assert2uvm_pkg:sv <0x45dc0fb7>
-			streams:   3, words:  1593
-		worklib.uvm_pkg:sv <0x7a55a91a>
-			streams: 5939, words: 8793371
+		worklib.axi_lite_fifo_assertions:sv <0x0ed73afc>
+			streams:  44, words: 39478
+		worklib.tb_top:sv <0x0ec35e52>
+			streams: 801, words: 923861
+		worklib.axi_lite_slave:sv <0x5594c65f>
+			streams:  29, words: 11760
+		worklib.axi_lite_assertions:sv <0x32cbd6dd>
+			streams:  25, words: 32234
+		worklib.cdns_uvm_pkg:sv <0x2d37fd2b>
+			streams: 249, words: 388987
+		worklib.cdns_uvmapi:svp <0x0ffec393>
+			streams:  27, words: 30091
+		worklib.cdns_assert2uvm_pkg:sv <0x1b3e2382>
+			streams:   3, words:  1700
+		worklib.uvm_pkg:sv <0x07a17dc0>
+			streams: 5939, words: 9090879
 	Building instance specific data structures.
 xmelab: *W,CGPIDF: Covergroup "per_instance" option , by default, is set as 0.
 xmelab: *N,COVCGN: Coverage configuration file command "set_covergroup -new_instance_reporting" can be specified to improve the scoping and naming of covergroup instances. It may be noted that subsequent merging of a coverage database saved with this command and a coverage database saved without this command is not allowed.
 	Loading native compiled code:     .................... Done
 	Design hierarchy summary:
 		                        Instances  Unique
-		Modules:                        3       3
+		Modules:                        4       4
 		Interfaces:                     1       1
 		Verilog packages:               5       5
-		Registers:                 16,515  11,804
-		Scalar wires:                  22       -
-		Vectored wires:                12       -
-		Named events:                   9      17
-		Always blocks:                 38      38
-		Initial blocks:               347     179
+		Registers:                 16,818  11,853
+		Scalar wires:                  27       -
+		Vectored wires:                15       -
+		Named events:                  17      25
+		Always blocks:                 74      74
+		Initial blocks:               356     188
 		Parallel blocks:               29      30
-		Cont. assignments:              3       3
-		Pseudo assignments:            19       -
-		Assertions:                     8       8
+		Cont. assignments:              6       6
+		Pseudo assignments:            26       -
+		Assertions:                    17      17
 		Covergroup Instances:           0       1
+		Compilation units:              1       1
 		SV Class declarations:        236     351
-		SV Class specializations:     449     449
-		Process Clocks:                 7       2
+		SV Class specializations:     453     453
+		Process Clocks:                17       3
 		Simulation timescale:         1ps
 	Writing initial simulation snapshot: worklib.random_tb:sv
 Loading snapshot worklib.random_tb:sv .................... Done
 SVSEED set from command line: 12345
 xcelium> source /home/toanhinh/tools/cadence/XCELIUM2503/tools/xcelium/files/xmsimrc
 xcelium> source /home/toanhinh/tools/cadence/XCELIUM2503/tools/methodology/UVM/CDNS-1.2/additions/sv/files/tcl/uvm_sim.tcl
+xcelium> database -open -shm -into random.shm random -default
+Created default SHM database random
+xcelium> probe -create -database random tb_top.axi_if -all
+Created probe 1
 xcelium> run
 UVM_INFO /home/toanhinh/tools/cadence/XCELIUM2503/tools/methodology/UVM/CDNS-1.2/sv/src/base/uvm_root.svh(412) @ 0: reporter [UVM/RELNOTES] 
 ----------------------------------------------------------------
@@ -113,13 +107,15 @@ CDNS-UVM-1.2 (25.03-s001)
       (Specify +UVM_NO_RELNOTES to turn off this notice)
 
 UVM_INFO @ 0: reporter [RNTST] Running test axi_lite_random_test...
-UVM_INFO ../../tb/axi_lite_random_test.sv(38) @ 0: uvm_test_top [RANDOM_TEST] Starting 100 randomized write/read pairs
+UVM_INFO ../../tb/axi_lite_random_test.sv(37) @ 0: uvm_test_top [RANDOM_TEST] Starting 200 randomized FIFO transactions
 SDI/Verilog Transaction Recording Facility Version 25.03-s001
-UVM_INFO ../../tb/axi_lite_random_test.sv(51) @ 7040000: uvm_test_top [RANDOM_TEST] Random sequence completed
-UVM_INFO /home/toanhinh/tools/cadence/XCELIUM2503/tools/methodology/UVM/CDNS-1.2/sv/src/base/uvm_objection.svh(1271) @ 7040000: reporter [TEST_DONE] 'run' phase is ready to proceed to the 'extract' phase
-UVM_INFO ../../tb/axi_lite_coverage.sv(75) @ 7040000: uvm_test_top.env.cov [COV_SUMMARY] transactions=200 functional_coverage=100.00%
-UVM_INFO ../../tb/axi_lite_scoreboard.sv(127) @ 7040000: uvm_test_top.env.scb [SCB_SUMMARY] writes=100 reads=100 response_errors=0 data_errors=0
-UVM_INFO /home/toanhinh/tools/cadence/XCELIUM2503/tools/methodology/UVM/CDNS-1.2/sv/src/base/uvm_report_catcher.svh(705) @ 7040000: reporter [UVM/REPORT/CATCHER] 
+UVM_INFO ../../tb/axi_lite_assertions.sv(107) @ 1095000: reporter [FIFO_WR_WRAP] Write pointer wrapped from 15 to 0
+UVM_INFO ../../tb/axi_lite_assertions.sv(120) @ 1775000: reporter [FIFO_RD_WRAP] Read pointer wrapped from 15 to 0
+UVM_INFO ../../tb/axi_lite_random_test.sv(53) @ 7150000: uvm_test_top [RANDOM_TEST] Random sequence completed with 111 writes and 89 reads
+UVM_INFO /home/toanhinh/tools/cadence/XCELIUM2503/tools/methodology/UVM/CDNS-1.2/sv/src/base/uvm_objection.svh(1271) @ 7150000: reporter [TEST_DONE] 'run' phase is ready to proceed to the 'extract' phase
+UVM_INFO ../../tb/axi_lite_coverage.sv(60) @ 7150000: uvm_test_top.env.cov [COV_SUMMARY] samples=200 operation_occupancy=100.00% functional_coverage=100.00%
+UVM_INFO ../../tb/axi_lite_scoreboard.sv(126) @ 7150000: uvm_test_top.env.scb [SCB_SUMMARY] writes=111 reads=89 response_errors=0 data_errors=0
+UVM_INFO /home/toanhinh/tools/cadence/XCELIUM2503/tools/methodology/UVM/CDNS-1.2/sv/src/base/uvm_report_catcher.svh(705) @ 7150000: reporter [UVM/REPORT/CATCHER] 
 --- UVM Report catcher Summary ---
 
 
@@ -130,16 +126,18 @@ Number of caught UVM_FATAL reports   :    0
 Number of caught UVM_ERROR reports   :    0
 Number of caught UVM_WARNING reports :    0
 
-UVM_INFO /home/toanhinh/tools/cadence/XCELIUM2503/tools/methodology/UVM/CDNS-1.2/sv/src/base/uvm_report_server.svh(851) @ 7040000: reporter [UVM/REPORT/SERVER] 
+UVM_INFO /home/toanhinh/tools/cadence/XCELIUM2503/tools/methodology/UVM/CDNS-1.2/sv/src/base/uvm_report_server.svh(851) @ 7150000: reporter [UVM/REPORT/SERVER] 
 --- UVM Report Summary ---
 
 ** Report counts by severity
-UVM_INFO :    8
+UVM_INFO :   10
 UVM_WARNING :    0
 UVM_ERROR :    0
 UVM_FATAL :    0
 ** Report counts by id
 [COV_SUMMARY]     1
+[FIFO_RD_WRAP]     1
+[FIFO_WR_WRAP]     1
 [RANDOM_TEST]     2
 [RNTST]     1
 [SCB_SUMMARY]     1
@@ -147,7 +145,7 @@ UVM_FATAL :    0
 [UVM/RELNOTES]     1
 [UVM/REPORT/CATCHER]     1
 
-Simulation complete via $finish(1) at time 7040 NS + 64
+Simulation complete via $finish(1) at time 7150 NS + 64
 /home/toanhinh/tools/cadence/XCELIUM2503/tools/methodology/UVM/CDNS-1.2/sv/src/base/uvm_root.svh:543     $finish;
 xcelium> exit
 xmsim: *N,COVCGN: Coverage configuration file command "set_covergroup -new_instance_reporting" can be specified to improve the scoping and naming of covergroup instances. It may be noted that subsequent merging of a coverage database saved with this command and a coverage database saved without this command is not allowed.
@@ -159,6 +157,6 @@ coverage setup:
   testname :  test_sv12345
 
 coverage files:
-  model(design data) :  ./cov_work/scope/icc_00000000_7357a3de.ucm
-  data               :  ./cov_work/scope/test_sv12345/icc_00000000_7357a3de.ucd
-TOOL:	xrun(64)	25.03-s001: Exiting on Oct 23, 2026 at 14:05:48 EDT  (total: 00:00:05)
+  model(design data) :  ./cov_work/scope/icc_00000000_4d9b92e2.ucm (reused)
+  data               :  ./cov_work/scope/test_sv12345/icc_00000000_4d9b92e2.ucd
+TOOL:	xrun(64)	25.03-s001: Exiting on Nov 27, 2026 at 10:41:42 EST  (total: 00:00:08)

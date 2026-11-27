@@ -16,7 +16,7 @@ interface axi_lite_if(
     logic [3:0]  WSTRB;
     logic        WVALID;
     logic        WREADY;
-    
+
     //B
     logic [1:0]  BRESP;
     logic        BVALID;
@@ -27,7 +27,7 @@ interface axi_lite_if(
     logic [2:0]  ARPROT;
     logic        ARVALID;
     logic        ARREADY;
-    
+
     //R
     logic [31:0] RDATA;
     logic [1:0]  RRESP;

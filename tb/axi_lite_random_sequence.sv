@@ -6,7 +6,10 @@ class axi_lite_random_sequence extends uvm_sequence #(axi_lite_item);
     //FACTORY
     `uvm_object_utils(axi_lite_random_sequence)
 
-    int unsigned num_pairs = 100;
+    localparam logic [31:0] DATA_ADDR = 32'h0000_0000;
+    int unsigned num_transactions = 200;
+    int unsigned write_count;
+    int unsigned read_count;
 
     //CONSTRUCTOR
     function new(string name = "axi_lite_random_sequence");
@@ -15,35 +18,35 @@ class axi_lite_random_sequence extends uvm_sequence #(axi_lite_item);
 
     //SEQUENCE
     virtual task body();
-        axi_lite_item write_req;
-        axi_lite_item read_req;
+        axi_lite_item req;
 
-        repeat (num_pairs) begin
-            //WRITE
-            write_req = axi_lite_item::type_id::create("write_req");
-            start_item(write_req);
+        write_count = 0;
+        read_count = 0;
 
-            if (!write_req.randomize() with {
-                is_write == 1'b1;
-                addr inside {
-                    32'h00, 32'h04, 32'h08, 32'h0C,
-                    32'h10, 32'h14, 32'h18, 32'h1C,
-                    32'h02, 32'h20
-                };
+        repeat (num_transactions) begin
+            req = axi_lite_item::type_id::create("req");
+            start_item(req);
+
+            if (!req.randomize() with {
+                is_write dist {1'b0 := 1, 1'b1 := 1};
+                addr == DATA_ADDR;
+                wstrb == (is_write ? 4'hF : 4'h0);
+                if (!is_write) wdata == 32'b0;
+
+                aw_delay     inside {[0:3]};
+                w_delay      inside {[0:3]};
+                bready_delay inside {[0:3]};
+                rready_delay inside {[0:3]};
             }) begin
-                `uvm_fatal("RANDOMIZE_FAILED", "Cannot randomize write request")
+                `uvm_fatal("RANDOMIZE_FAILED", "Cannot randomize FIFO request")
             end
 
-            finish_item(write_req);
+            finish_item(req);
 
-            //READ BACK
-            read_req = axi_lite_item::type_id::create("read_req");
-            start_item(read_req);
-            read_req.is_write = 1'b0;
-            read_req.addr     = write_req.addr;
-            read_req.wdata    = 32'b0;
-            read_req.wstrb    = 4'b0000;
-            finish_item(read_req);
+            if (req.is_write)
+                write_count++;
+            else
+                read_count++;
         end
     endtask
 

@@ -1,0 +1,40 @@
+# Simulation run directories
+/work/
+xcelium*.d/
+INCA_libs/
+cov_work/
+*.shm/
+
+# Simulator logs, history and local configuration
+*.log
+*.log.*
+transcript
+modelsim.ini
+xrun.history
+*.key
+*.stackdump
+
+# Waveforms and coverage databases
+*.wlf
+*.vcd
+*.fst
+*.ucdb
+*.ucm
+*.ucd
+
+# Compiled objects and temporary files
+*.o
+*.obj
+*.so
+*.dll
+*.tmp
+*.swp
+*~
+.DS_Store
+Thumbs.db
+
+# Keep the four published simulation logs
+!/results/cadence/directed.log
+!/results/cadence/random.log
+!/results/questa/directed.log
+!/results/questa/random.log

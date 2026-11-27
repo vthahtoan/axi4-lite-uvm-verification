@@ -29,7 +29,7 @@ class axi_lite_env extends uvm_env;
         super.connect_phase(phase);
 
         agent.ap.connect(scb.analysis_imp);
-        agent.ap.connect(cov.analysis_export);
+        scb.cov_ap.connect(cov.analysis_export);
     endfunction
 
 endclass

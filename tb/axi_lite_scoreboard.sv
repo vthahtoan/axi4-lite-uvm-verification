@@ -1,20 +1,29 @@
 import uvm_pkg::*;
 `include "uvm_macros.svh"
 
+typedef struct packed {
+    bit          is_write;
+    bit [31:0]   addr;
+    bit [3:0]    wstrb;
+    logic [1:0]  resp;
+    int unsigned pre_count;
+} fifo_cov_sample_t;
+
 class axi_lite_scoreboard extends uvm_scoreboard;
 
     //FACTORY
     `uvm_component_utils(axi_lite_scoreboard)
 
     uvm_analysis_imp #(axi_lite_item, axi_lite_scoreboard) analysis_imp;
+    uvm_analysis_port #(fifo_cov_sample_t) cov_ap;
 
     //MODEL
-    localparam int unsigned NUM_REGS = 8;
-    localparam int unsigned BYTES_PER_REG = 4;
-    localparam logic [1:0] RESP_OKAY   = 2'b00;
-    localparam logic [1:0] RESP_SLVERR = 2'b10;
+    localparam logic [1:0]  RESP_OKAY   = 2'b00;
+    localparam logic [1:0]  RESP_SLVERR = 2'b10;
+    localparam logic [31:0] DATA_ADDR  = 32'h0000_0000;
+    localparam int FIFO_DEPTH = 16;
 
-    logic [31:0] expected_regs [0:NUM_REGS-1];
+    logic [31:0] expected_fifo[$];
     int unsigned write_count;
     int unsigned read_count;
     int unsigned response_errors;
@@ -29,6 +38,7 @@ class axi_lite_scoreboard extends uvm_scoreboard;
     virtual function void build_phase(uvm_phase phase);
         super.build_phase(phase);
         analysis_imp = new("analysis_imp", this);
+        cov_ap = new("cov_ap", this);
         reset_model();
         write_count = 0;
         read_count = 0;
@@ -38,37 +48,49 @@ class axi_lite_scoreboard extends uvm_scoreboard;
 
     //RESET
     function void reset_model();
-        foreach (expected_regs[i]) begin
-            expected_regs[i] = 32'b0;
-        end
-    endfunction
-
-    //ADDRESS
-    function bit address_valid(bit [31:0] addr);
-        return (addr < NUM_REGS * BYTES_PER_REG) &&
-               ((addr % BYTES_PER_REG) == 0);
+        expected_fifo.delete();
     endfunction
 
     //TRANSACTION
     virtual function void write(axi_lite_item item);
-        bit valid_addr;
-        int unsigned reg_index;
         logic [1:0] expected_resp;
         logic [31:0] expected_data;
+        fifo_cov_sample_t cov_data;
 
         if (item == null) begin
             `uvm_error("NULL_ITEM", "Scoreboard received a null transaction")
             return;
         end
 
-        valid_addr = address_valid(item.addr);
-        expected_resp = valid_addr ? RESP_OKAY : RESP_SLVERR;
+        cov_data.is_write  = item.is_write;
+        cov_data.addr      = item.addr;
+        cov_data.wstrb     = item.wstrb;
+        cov_data.resp      = item.resp;
+        cov_data.pre_count = expected_fifo.size();
 
-        if (valid_addr) begin
-            reg_index = item.addr / BYTES_PER_REG;
+        cov_ap.write(cov_data);
+
+        expected_resp = RESP_SLVERR;
+        expected_data = 32'd0;
+
+        if (item.is_write) begin
+            write_count++;
+
+            if ((item.addr == DATA_ADDR) &&
+                (item.wstrb == 4'hF) &&
+                (expected_fifo.size() < FIFO_DEPTH)) begin
+                expected_fifo.push_back(item.wdata);
+                expected_resp = RESP_OKAY;
+            end
+        end else begin
+            read_count++;
+
+            if ((item.addr == DATA_ADDR) && (expected_fifo.size() > 0)) begin
+                expected_data = expected_fifo.pop_front();
+                expected_resp = RESP_OKAY;
+            end
         end
 
-        //RESPONSE
         if (item.resp !== expected_resp) begin
             response_errors++;
             `uvm_error("RESP_MISMATCH",
@@ -77,34 +99,11 @@ class axi_lite_scoreboard extends uvm_scoreboard;
                           item.addr, expected_resp, item.resp))
         end
 
-        //WRITE
-        if (item.is_write) begin
-            write_count++;
-
-            if (valid_addr) begin
-                for (int lane = 0; lane < BYTES_PER_REG; lane++) begin
-                    if (item.wstrb[lane]) begin
-                        expected_regs[reg_index][8*lane +: 8] =
-                            item.wdata[8*lane +: 8];
-                    end
-                end
-            end
-        end 
-        //READ
-        else begin
-            read_count++;
-            expected_data = 32'b0;
-
-            if (valid_addr) begin
-                expected_data = expected_regs[reg_index];
-            end
-
-            if (item.rdata !== expected_data) begin
-                data_errors++;
-                `uvm_error("DATA_MISMATCH",
-                    $sformatf("READ addr=0x%08h expected_data=0x%08h actual_data=0x%08h",
-                              item.addr, expected_data, item.rdata))
-            end
+        if (!item.is_write && (item.rdata !== expected_data)) begin
+            data_errors++;
+            `uvm_error("DATA_MISMATCH",
+                $sformatf("READ addr=0x%08h expected_data=0x%08h actual_data=0x%08h",
+                          item.addr, expected_data, item.rdata))
         end
     endfunction
 
