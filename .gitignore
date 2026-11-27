@@ -8,17 +8,13 @@ cov_work/
 # Simulator logs, history and local configuration
 *.log
 *.log.*
-transcript
-modelsim.ini
 xrun.history
 *.key
 *.stackdump
 
 # Waveforms and coverage databases
-*.wlf
 *.vcd
 *.fst
-*.ucdb
 *.ucm
 *.ucd
 
@@ -33,8 +29,6 @@ xrun.history
 .DS_Store
 Thumbs.db
 
-# Keep the four published simulation logs
+# Keep the published Cadence simulation logs
 !/results/cadence/directed.log
 !/results/cadence/random.log
-!/results/questa/directed.log
-!/results/questa/random.log

@@ -64,22 +64,14 @@ cp sim/cadence/run_random.sh sim/cadence/wave_random.tcl work/random_test/
 
 Each run directory contains its log and an SHM waveform of `tb_top.axi_if`. To open the random waveform, run `simvision random.shm` from `work/random_test`. The random seed is set in `sim/cadence/run_random.sh`.
 
-### Siemens Questa
-
-```bash
-mkdir -p work/directed_test work/random_test
-cp sim/questa/run_directed.do work/directed_test/
-cp sim/questa/run_random.do work/random_test/
-
-(cd work/directed_test && vsim -c -do run_directed.do)
-(cd work/random_test && vsim -c -do run_random.do)
-```
-
-The Questa scripts use the `mtiUvm` library and generate WLF waveforms. The [results index](results/README.md) identifies the historical Questa logs from the earlier register-bank implementation.
-
 ## Repository layout
 
 - [rtl/](rtl/) contains the AXI4-Lite FIFO slave.
 - [tb/](tb/) contains the UVM testbench, tests, and assertions.
 - [sim/](sim/) contains simulator scripts.
 - [results/](results/) contains simulation logs.
+
+---
+
+Developed by **Võ Thanh Toàn**\
+University of Information Technology, VNU-HCM.
