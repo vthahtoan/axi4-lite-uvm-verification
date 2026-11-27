@@ -7,9 +7,9 @@ This SystemVerilog/UVM project verifies a 16-entry, 32-bit FIFO accessed through
 | Xcelium 25.03-s001, UVM 1.2 | Seed | Writes / reads | Functional coverage | UVM errors / fatals |
 | --- | ---: | ---: | ---: | ---: |
 | [Directed FIFO test](results/cadence/directed.log) | 1 | 17 / 18 | 100% | 0 / 0 |
-| [Constrained-random FIFO baseline](results/cadence/random.log) | 12345 | 111 / 89 | 100% | 0 / 0 |
+| [Constrained-random FIFO test](results/cadence/random.log) | 12345 | 111 / 89 | 100% | 0 / 0 |
 
-Both runs reported zero scoreboard data and response mismatches. The random baseline predates the randomized channel delays in the current sequence. The coverage percentages apply to the implemented bins and crosses.
+Both runs reported zero scoreboard data and response mismatches. The coverage percentages apply to the implemented bins and crosses.
 
 ## FIFO interface
 
